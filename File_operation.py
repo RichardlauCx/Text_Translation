@@ -10,6 +10,7 @@ import urllib
 import random
 import json
 import time
+import sys
 import re
 
 
@@ -23,7 +24,12 @@ def extraction_of_text(path_in, path_out):
     pattern_i = r"^msgid \".+\""
     pattern_e = "[A-Za-z]+"
     last = 0  # 设置翻译起始的节点
-    
+
+    # 0. 获取文件信息
+    with open(path_in, "r") as f_obj:
+        # 获取文件总行数
+        num_lines = len(f_obj.readlines())
+
     # 1. 获取数据
     with open(path_in, "r") as f_obj:
         line = "start"  # 对于存在单词的行进行获取
@@ -115,6 +121,14 @@ def translation(sentence):
     finally:
         if httpClient:
             httpClient.close()
+
+# 进度条
+def progress_bar_1(num):
+    for i in range(1, 101):
+        print("\r", end="")
+        print("StateOfTranslationTemplate: {}%: ".format(i), "▋" * (i // 2), end="")
+        sys.stdout.flush()
+        time.sleep(0.5)
 
 
 if __name__ == '__main__':
