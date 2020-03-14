@@ -1,0 +1,18 @@
+读取msgid后“”内的文本（“”内所有，可能包含空格、￥、%、/、#等特殊字符，特殊字符应原样输出）：
+
+msgid "Pages:"
+
+输出在msgstr后的“”中：
+
+msgstr ""
+
+（文件其余格式不能改变）
+
+
+样例1：
+读取：msgid "%1$s Comments"
+输出：msgstr "%1$s 评论"
+
+样例2：
+读取：msgid "Reset My Password"
+输出：msgstr "重置我的密码"
