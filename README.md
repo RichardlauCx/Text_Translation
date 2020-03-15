@@ -11,6 +11,9 @@ Achieved Through Baidu API, file to the specified file location
 ## 2. 细节上面可以判断是否为标点符号，来确认要不要也一同翻译
 ## 3. 实现动态进度条功能
 
+# 可优化
+## 1. 可以一次性读取全部内容后操作
+
 # 待解决问题
 ## 1. 特殊字符在匹配模式过程中起立作品，无法正常匹配, 例如：$
 ## 2. 原本格式当中部分符号（目前见到的为空格）格式会改变
@@ -27,10 +30,11 @@ Achieved Through Baidu API, file to the specified file location
 ## 3. 重复是由于后一个文本当中的内容包含于前一个文本中，把索引起始位置调整为上一次结束
 
 # 使用方法
-## 0. 如果作为测试，当前环境下解压文件后，直接运行File_operation.py文件即可
-## 1. path_words、path_deposit这两个路径必须一致，且文件当中要存有标准输出输入格式，
+## 0. 先填写自己的appid，secretKey（运行的灵魂）
+## 1. 如果作为测试，当前环境下解压文件后，直接运行File_operation.py文件即可
+## 2. path_words、path_deposit这两个路径必须一致，且文件当中要存有标准输出输入格式，
 ### 即：msgid "&lt;" msgstr ""
-## 2. 细节上面有用法的调整可以微调代码
+## 3. 细节上面有用法的调整可以微调代码
 
 # 版本
 ## V 1.0

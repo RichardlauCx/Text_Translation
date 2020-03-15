@@ -14,9 +14,10 @@ import sys
 import re
 
 
-def extraction_of_text(path_in, path_out):
+def extraction_of_text(path_in, path_out, _output_purpose=sys.stdout):
     """
     实现对应文本的汉化功能
+    :param _output_purpose:  标准输出地（进度条视图）
     :param path_in: 数据输入路径
     :param path_out: 数据输出路径
     :return: 翻译成功之后的json数据
@@ -24,18 +25,18 @@ def extraction_of_text(path_in, path_out):
     pattern_i = r"^msgid \".+\""
     pattern_e = "[A-Za-z]+"
     last = 0  # 设置翻译起始的节点
-
-    # 0. 获取文件信息
-    with open(path_in, "r") as f_obj:
-        # 获取文件总行数
-        num_lines = len(f_obj.readlines())
+    # scale = 0  # 翻译进度比例
 
     # 1. 获取数据
     with open(path_in, "r") as f_obj:
-        line = "start"  # 对于存在单词的行进行获取
-      
-        while line is not '':
-            line = f_obj.readline()
+        # line = "start"  # 对于存在单词的行进行获取
+        lines = f_obj.readlines()
+        num_line = len(lines)
+
+        # while line is not '':
+        for scale in range(num_line):
+            # line = f_obj.readline()
+            line = lines[scale]
             lists = re.findall(pattern_i, line)  # 在这里可以把加号"+"，改为所需查询的数字范围，format：{0,21}
             # print(lists)
 
@@ -47,11 +48,11 @@ def extraction_of_text(path_in, path_out):
                     string_extraction += " " + str_part
 
                 # 2. 文本翻译
-                print(time.strftime("%Y-%m-%d-%H:%M:%S", time.localtime()))
+                # print('\r' + time.strftime("%Y-%m-%d-%H:%M:%S", time.localtime()), end='')
 
                 string_after = translation(string_initial)  # 翻译成功之后的json
-                print(string_after)
-                # result_dst = string_after['trans_result'][0]['dst']  # 翻译之后的汉语
+                # print(string_after)
+                result_dst = string_after['trans_result'][0]['dst']  # 翻译之后的汉语
                 # print(time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime()))
                 # print(time.time())
 
@@ -63,6 +64,18 @@ def extraction_of_text(path_in, path_out):
                 pattern_txt = re.compile(string_initial)
 
                 try:
+                    scale += 2
+
+                    # 实现进度条
+                    percentage = int((scale / num_line) * 100)
+                    a = "▮" * (percentage // 2)
+                    b = "▯" * (50 - (percentage // 2))
+                    # print("\r", end="")
+                    _output_purpose.write('\r' + time.strftime("%Y-%m-%d-%H:%M:%S: ", time.localtime())
+                                          + " StateOfTranslationTemplate: {}%: [{}{}]".format(percentage, a, b))  # 调整这里
+                    _output_purpose.flush()
+                    # time.sleep(0.1)
+
                     # index = re.search(pattern_txt, text_1).span()[1]+10
                     index = text_1.find(string_initial, last) + len(string_initial) + 10  # 解决输出，存入相同位置问题
                     # if text_1[index:index+2] != '"':  # 此跳过已有数据方法待完善
@@ -75,13 +88,15 @@ def extraction_of_text(path_in, path_out):
                     last = index
                     # time.sleep(0.5)
                     # print(result_dst)
-                    # text_updates = text_1[:index] + result_dst + text_1[index:]
-                    # f_2 = open(path_out, "w")
-                    # f_2.write(text_updates)
-                    # # print(result_dst)
-                    #
-                    # f_2.close()
+                    text_updates = text_1[:index] + result_dst + text_1[index:]
+                    f_2 = open(path_out, "w")
+                    f_2.write(text_updates)
+                    # print(result_dst)
+
+                    f_2.close()
+
                 finally:
+
                     f_1.close()
 
     # return string_after
@@ -122,21 +137,14 @@ def translation(sentence):
         if httpClient:
             httpClient.close()
 
-# 进度条
-def progress_bar_1(num):
-    for i in range(1, 101):
-        print("\r", end="")
-        print("StateOfTranslationTemplate: {}%: ".format(i), "▋" * (i // 2), end="")
-        sys.stdout.flush()
-        time.sleep(0.5)
-
 
 if __name__ == '__main__':
     # path_words = "Wait_for_the_translation_pre.txt"  # 可以改为对应的网址路径
     # path_words = "Ext_after_translation.txt"
     # path_deposit = "Ext_after_translation.txt"  # 文本翻译后的输出路径（和获取数据路径一直，即覆盖原数据）
-    
+
     path_words = "Wait_for_the_translation.txt"
     path_deposit = path_words
-    extraction_of_text(path_words, path_deposit)
+    output_purpose = None  # 标准输出地（进度条视图）
 
+    extraction_of_text(path_words, path_deposit)

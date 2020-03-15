@@ -36,8 +36,8 @@ def progress_bar2(num):
         a = "▮" * (percentage // 2)
         b = "▯" * (50 - (percentage // 2))
         # print("\r", end="")
-        print("\r StateOfTranslationTemplate: {}%: [{}{}]".format(percentage, a, b), end="")
-        sys.stdout.flush()
+        sys.stdout.write("\r StateOfTranslationTemplate: {}%: [{}{}]".format(percentage, a, b), end="")  # 调整这里
+        # sys.stdout.flush()
         time.sleep(0.1)
         i += 1
 
