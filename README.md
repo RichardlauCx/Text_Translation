@@ -5,14 +5,15 @@ Achieved Through Baidu API, file to the specified file location
 ## 1. 先把需要翻译的数据提取出来
 ## 2. 对数据格式要求进行提炼、修改
 ## 3. 写入对应的文件位置
+## 4. 实时动态跟进时间与翻译进度
 
 # 可加工
 ## 1. 若存入位置已经有数据存在，则直接进行下一次翻译
 ## 2. 细节上面可以判断是否为标点符号，来确认要不要也一同翻译
-## 3. 实现动态进度条功能
+## 3. 实现动态进度条功能  *accomplished*
 
 # 可优化
-## 1. 可以一次性读取全部内容后操作
+## 1. 可以一次性读取全部内容后操作  *accomplished*
 
 # 待解决问题
 ## 1. 特殊字符在匹配模式过程中起立作品，无法正常匹配, 例如：$
@@ -23,7 +24,9 @@ Achieved Through Baidu API, file to the specified file location
 ## 1. 进行翻译过程之中，输入输出文件字符编码必须为"utf-8"
 ## 2. 查看翻译后文本可以通过"GBK"编码方式
 ## 3. 如果不是需要从头开始翻译，务必要给last参数输入起始翻译位置，不然如果有子字符串关系的文本会出现重复问题
-## 4. 若在使用过程中有什么疑惑和bug欢迎随时找我交流
+## 4. Wait_for_the_translation_pre为原始数据备份文件，Wait_for_the_translation为数据操作文件
+## 5. 若在使用过程中有什么疑惑和bug欢迎随时找我交流
+
 
 # 解决问题
 ## 1. 通过调整为find() 函数进行了实现
@@ -41,4 +44,4 @@ Achieved Through Baidu API, file to the specified file location
 Introduction：初步实现从特定文件的特定位置，结合百度翻译API，翻译至文件中特定位置。
 
 ##V 1.1
-Introduction：引入了实时动态进度条以及时间
+Introduction：引入了实时动态的进度条以及时间

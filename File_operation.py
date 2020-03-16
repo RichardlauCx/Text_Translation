@@ -22,9 +22,9 @@ def extraction_of_text(path_in, path_out, _output_purpose=sys.stdout):
     :param path_out: 数据输出路径
     :return: 翻译成功之后的json数据
     """
-    pattern_i = r"^msgid \".+\""
+    pattern_i = r"^msgid \".+\""   # 在这里可以把加号"+"，改为所需查询的数字范围，format：{0,21}
     pattern_e = "[A-Za-z]+"
-    last = 0  # 设置翻译起始的节点
+    last = 0  # 设置翻译起始的节点，文字索引位置
     # scale = 0  # 翻译进度比例
 
     # 1. 获取数据
@@ -33,12 +33,9 @@ def extraction_of_text(path_in, path_out, _output_purpose=sys.stdout):
         lines = f_obj.readlines()
         num_line = len(lines)
 
-        # while line is not '':
         for scale in range(num_line):
-            # line = f_obj.readline()
             line = lines[scale]
-            lists = re.findall(pattern_i, line)  # 在这里可以把加号"+"，改为所需查询的数字范围，format：{0,21}
-            # print(lists)
+            lists = re.findall(pattern_i, line)
 
             if len(lists) is not 0:
                 string_initial = str(lists[0][7:-1])  # 包含特殊字符的字符串
@@ -48,35 +45,26 @@ def extraction_of_text(path_in, path_out, _output_purpose=sys.stdout):
                     string_extraction += " " + str_part
 
                 # 2. 文本翻译
-                # print('\r' + time.strftime("%Y-%m-%d-%H:%M:%S", time.localtime()), end='')
-
                 string_after = translation(string_initial)  # 翻译成功之后的json
-                # print(string_after)
                 result_dst = string_after['trans_result'][0]['dst']  # 翻译之后的汉语
-                # print(time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime()))
-                # print(time.time())
 
                 # 3. 写入文件
                 f_1 = open(path_in, "r")
                 text_1 = f_1.read()
                 f_1.close()
 
-                pattern_txt = re.compile(string_initial)
+                pattern_txt = re.compile(string_initial)  # 留一个模式
 
                 try:
                     scale += 2
 
-                    # 实现进度条
+                    # 4. 实现进度条
                     percentage = int((scale / num_line) * 100)
                     a = "▮" * (percentage // 2)
                     b = "▯" * (50 - (percentage // 2))
-                    # print("\r", end="")
                     _output_purpose.write('\r' + time.strftime("%Y-%m-%d-%H:%M:%S: ", time.localtime())
                                           + " StateOfTranslationTemplate: {}%: [{}{}]".format(percentage, a, b))  # 调整这里
                     _output_purpose.flush()
-                    # time.sleep(0.1)
-
-                    # index = re.search(pattern_txt, text_1).span()[1]+10
                     index = text_1.find(string_initial, last) + len(string_initial) + 10  # 解决输出，存入相同位置问题
                     # if text_1[index:index+2] != '"':  # 此跳过已有数据方法待完善
                     #     continue
@@ -86,20 +74,16 @@ def extraction_of_text(path_in, path_out, _output_purpose=sys.stdout):
 
                 else:
                     last = index
-                    # time.sleep(0.5)
-                    # print(result_dst)
                     text_updates = text_1[:index] + result_dst + text_1[index:]
                     f_2 = open(path_out, "w")
                     f_2.write(text_updates)
-                    # print(result_dst)
 
                     f_2.close()
 
                 finally:
-
                     f_1.close()
 
-    # return string_after
+    return string_after
 
 
 def translation(sentence):
@@ -128,7 +112,6 @@ def translation(sentence):
         # result_all = response.read().decode('gbk')
         result = json.loads(result_all)
 
-        # print(result)
         return result
 
     except Exception as e:
@@ -139,12 +122,8 @@ def translation(sentence):
 
 
 if __name__ == '__main__':
-    # path_words = "Wait_for_the_translation_pre.txt"  # 可以改为对应的网址路径
-    # path_words = "Ext_after_translation.txt"
-    # path_deposit = "Ext_after_translation.txt"  # 文本翻译后的输出路径（和获取数据路径一直，即覆盖原数据）
-
-    path_words = "Wait_for_the_translation.txt"
-    path_deposit = path_words
+    path_words = "Wait_for_the_translation.txt"  # 获取数据来源文件
+    path_deposit = path_words  # 文本翻译后的输出路径（和获取数据路径一直，即覆盖原数据）
     output_purpose = None  # 标准输出地（进度条视图）
 
     extraction_of_text(path_words, path_deposit)
