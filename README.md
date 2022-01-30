@@ -43,5 +43,5 @@ Achieved Through Baidu API, file to the specified file location
 ## V 1.0
 Introduction：初步实现从特定文件的特定位置，结合百度翻译API，翻译至文件中特定位置。
 
-##V 1.1
+## V 1.1
 Introduction：引入了实时动态的进度条以及时间
